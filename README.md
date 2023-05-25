@@ -26,7 +26,7 @@ kind create cluster --config kind-cluster-with-extramounts.yaml
 ### Configure clusterctl
 
 - Download [clusterctl.yaml](./clusterctl.yaml)
-- Move it to the following directory: **~/.clusterctl/clusterctl.yaml**
+- Move it to the following directory: **~/.cluster-api/clusterctl.yaml**
 
 ### Install Cluster API (and providers)
 
@@ -43,10 +43,9 @@ clusterctl init -i docker -b rke2 -c rke2
 - Open a terminal and run the following:
 
 ```bash
-export CABPR_NAMESPACE=ns1
 export CABPR_CP_REPLICAS=1
 export CABPR_WK_REPLICAS=1
-export KUBERNETES_VERSION=v1.23.0
+export KUBERNETES_VERSION=v1.26.4
 
 clusterctl generate cluster test1 --from https://github.com/capi-samples/opensuse-23/blob/main/templates/online-default.yaml > cluster.yaml
 ```
@@ -55,4 +54,65 @@ clusterctl generate cluster test1 --from https://github.com/capi-samples/opensus
 
 ```bash
 kubectl apply -f cluster.yaml
+```
+
+- Watch the **Cluster** being provisioned:
+
+```bash
+kubectl get clusters -A -w
+```
+
+- Watch the **Machine** being provisioned:
+
+```bash
+kubectl get machines -A -w
+```
+
+### Connect to the new cluster
+
+- In your terminal run the following to get the kubeconfig for the child cluster:
+
+```bash
+clusterctl get kubeconfig test1 > test.kubeconfig
+```
+
+- Then use it to explore the cluster:
+
+```bash
+kubectl --kubeconfig test.kubeconfig get pods -A
+```
+
+### Scaling nodes
+
+Lets scale the control plane to 2 nodes:
+
+- Open 2 terminals
+- In the first terminal watch the nodes of the child cluster:
+
+```bash
+kubectl --kubeconfig test.kubeconfig get nodes -w
+```
+
+- In the second terminal edit the control plane:
+
+```bash
+kubectl edit rke2controlplane/test1-control-plane
+```
+
+- In the editor find **replicas** and change it to 2
+- Save and exit from editor
+- Watch the node be added to the child cluster
+
+### Clear up
+
+- Delete the child cluster by running:
+
+```bash
+kubectl delete cluster test1
+```
+
+-- Delete the management cluster by running:
+
+```bash
+kind delete cluster --name=capi-test
 ```
