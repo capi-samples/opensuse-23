@@ -77,7 +77,7 @@ clusterctl generate cluster test1 --from https://github.com/capi-samples/opensus
 
 #### For Apple Silicon machines
 
-***TODO***
+- Open a terminal and run the following:
 
 ```bash
 export CONTROL_PLANE_MACHINE_COUNT=1
