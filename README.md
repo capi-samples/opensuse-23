@@ -129,7 +129,7 @@ kubectl --kubeconfig test.kubeconfig get pods -A
 - In your terminal run the following to get the kubeconfig for the child cluster:
 
 ```bash
-kind get kubeconfig test1 > test.kubeconfig
+kind get kubeconfig --name test1 > test.kubeconfig
 ```
 
 - Then use it to explore the cluster:
@@ -157,7 +157,7 @@ kubectl --kubeconfig test.kubeconfig get nodes -w
 kubectl edit rke2controlplane/test1-control-plane
 ```
 
-- In the editor find **replicas** and change it to 3
+- In the editor find **spec.replicas** and change it to 3
 - Save and exit from editor
 - Watch the nodes being added to the child cluster
 
@@ -169,7 +169,7 @@ kubectl edit rke2controlplane/test1-control-plane
 kubectl edit kubeadmcontrolplane/test1-control-plane
 ```
 
-- In the editor find **replicas** and change it to 3
+- In the editor find **spec.replicas** and change it to 3
 - Save and exit from editor
 - Watch the nodes being added to the child cluster
 
