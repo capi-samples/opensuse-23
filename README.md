@@ -27,8 +27,16 @@ kind create cluster --config kind-cluster-with-extramounts.yaml
 
 ### Configure clusterctl
 
+#### For non Apple Silicon machines
+
 - Download [clusterctl.yaml](./clusterctl.yaml)
 - Move it to the following directory: **~/.cluster-api/clusterctl.yaml**
+
+> You will probably need to create the **~/.cluster-api** directory.
+
+#### For Apple Silicon machines
+
+This step isn't required as we are using different providers.
 
 ### Install Cluster API (and providers)
 
@@ -101,6 +109,8 @@ kubectl get machines -A -w
 
 ### Connect to the new cluster
 
+#### For non Apple Silicon machines
+
 - In your terminal run the following to get the kubeconfig for the child cluster:
 
 ```bash
@@ -113,9 +123,23 @@ clusterctl get kubeconfig test1 > test.kubeconfig
 kubectl --kubeconfig test.kubeconfig get pods -A
 ```
 
+#### For Apple Silicon machines
+
+- In your terminal run the following to get the kubeconfig for the child cluster:
+
+```bash
+kind get kubeconfig test1 > test.kubeconfig
+```
+
+- Then use it to explore the cluster:
+
+```bash
+kubectl --kubeconfig test.kubeconfig get pods -A
+```
+
 ### Scaling nodes
 
-Lets scale the control plane to 2 nodes:
+Lets scale the control plane to 3 nodes:
 
 - Open 2 terminals
 - In the first terminal watch the nodes of the child cluster:
@@ -134,7 +158,7 @@ kubectl edit rke2controlplane/test1-control-plane
 
 - In the editor find **replicas** and change it to 3
 - Save and exit from editor
-- Watch the node be added to the child cluster
+- Watch the nodes being added to the child cluster
 
 #### For Apple Silicon machines
 
@@ -146,7 +170,7 @@ kubectl edit kubeadmcontrolplane/test1-control-plane
 
 - In the editor find **replicas** and change it to 3
 - Save and exit from editor
-- Watch the node be added to the child cluster
+- Watch the nodes being added to the child cluster
 
 ### Clear up
 
@@ -156,7 +180,7 @@ kubectl edit kubeadmcontrolplane/test1-control-plane
 kubectl delete cluster test1
 ```
 
--- Delete the management cluster by running:
+- Delete the management cluster by running:
 
 ```bash
 kind delete cluster --name=capi-test
