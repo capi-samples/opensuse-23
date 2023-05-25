@@ -14,6 +14,8 @@ To complete the tutorial yourself you will need to install the following:
 
 ## Tutorial
 
+> If you have a Mac with Apple Silicon some of the sections will have alternative commands.
+
 ### Create a management cluster
 
 - Download [kind-cluster-with-extramounts.yaml](./kind-cluster-with-extramounts.yaml)
@@ -30,6 +32,8 @@ kind create cluster --config kind-cluster-with-extramounts.yaml
 
 ### Install Cluster API (and providers)
 
+#### For non Apple Silicon machines
+
 We need to install the Docker and RKE2 providers.
 
 - In a terminal run the following:
@@ -38,7 +42,19 @@ We need to install the Docker and RKE2 providers.
 clusterctl init -i docker2 -b rke2 -c rke2
 ```
 
+#### For Apple Silicon machines
+
+We need to install the Docker and Kubeadm providers.
+
+- In a terminal run the following:
+
+```bash
+clusterctl init -i docker
+```
+
 ### Create workload/child cluster
+
+#### For non Apple Silicon machines
 
 - Open a terminal and run the following:
 
@@ -50,11 +66,26 @@ export KUBERNETES_VERSION=v1.26.4
 clusterctl generate cluster test1 --from https://github.com/capi-samples/opensuse-23/blob/main/templates/online-default.yaml > cluster.yaml
 ```
 
+#### For Apple Silicon machines
+
+***TODO***
+
+```bash
+export CONTROL_PLANE_MACHINE_COUNT=1
+export WORKER_MACHINE_COUNT=1
+export KUBERNETES_VERSION=v1.26.4
+
+clusterctl generate cluster test1 --from https://github.com/capi-samples/opensuse-23/blob/main/templates/kubeadm-docker.yaml > cluster.yaml
+```
+#### Apply cluster definition
+
 - Apply the cluster yaml to your management cluster
 
 ```bash
 kubectl apply -f cluster.yaml
 ```
+
+#### Observe cluster being provisioned
 
 - Watch the **Cluster** being provisioned:
 
@@ -93,10 +124,24 @@ Lets scale the control plane to 2 nodes:
 kubectl --kubeconfig test.kubeconfig get nodes -w
 ```
 
+#### For non Apple Silicon machines
+
 - In the second terminal edit the control plane:
 
 ```bash
 kubectl edit rke2controlplane/test1-control-plane
+```
+
+- In the editor find **replicas** and change it to 2
+- Save and exit from editor
+- Watch the node be added to the child cluster
+
+#### For Apple Silicon machines
+
+- In the second terminal edit the control plane:
+
+```bash
+kubectl edit kubeadmcontrolplane/test1-control-plane
 ```
 
 - In the editor find **replicas** and change it to 2
