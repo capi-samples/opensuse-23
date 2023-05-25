@@ -57,6 +57,7 @@ We need to install the Docker and Kubeadm providers.
 - In a terminal run the following:
 
 ```bash
+export EXP_CLUSTER_RESOURCE_SET=true
 clusterctl init -i docker
 ```
 
