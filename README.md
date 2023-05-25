@@ -132,7 +132,7 @@ kubectl --kubeconfig test.kubeconfig get nodes -w
 kubectl edit rke2controlplane/test1-control-plane
 ```
 
-- In the editor find **replicas** and change it to 2
+- In the editor find **replicas** and change it to 3
 - Save and exit from editor
 - Watch the node be added to the child cluster
 
@@ -144,7 +144,7 @@ kubectl edit rke2controlplane/test1-control-plane
 kubectl edit kubeadmcontrolplane/test1-control-plane
 ```
 
-- In the editor find **replicas** and change it to 2
+- In the editor find **replicas** and change it to 3
 - Save and exit from editor
 - Watch the node be added to the child cluster
 
