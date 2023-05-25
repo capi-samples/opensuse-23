@@ -35,7 +35,7 @@ We need to install the Docker and RKE2 providers.
 - In a terminal run the following:
 
 ```bash
-clusterctl init -i docker -b rke2 -c rke2
+clusterctl init -i docker2 -b rke2 -c rke2
 ```
 
 ### Create workload/child cluster
